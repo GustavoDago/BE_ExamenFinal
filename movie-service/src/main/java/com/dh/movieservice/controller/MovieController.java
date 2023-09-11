@@ -1,6 +1,7 @@
 package com.dh.movieservice.controller;
 
 import com.dh.movieservice.model.Movie;
+import com.dh.movieservice.sender.MovieSender;
 import com.dh.movieservice.service.MovieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
-
+    private MovieSender movieSender;
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
@@ -28,6 +29,7 @@ public class MovieController {
 
     @PostMapping("/save")
     ResponseEntity<Movie> saveMovie(@RequestBody Movie movie) {
+        movieSender.send(movie);
         return ResponseEntity.ok().body(movieService.save(movie));
     }
 }
