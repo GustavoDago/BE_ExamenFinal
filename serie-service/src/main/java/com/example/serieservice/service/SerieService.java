@@ -2,6 +2,7 @@ package com.example.serieservice.service;
 
 import com.example.serieservice.model.Serie;
 import com.example.serieservice.repository.SerieRepository;
+import com.example.serieservice.sender.SerieSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public class SerieService {
 
     private final SerieRepository repository;
-
+    private SerieSender serieSender;
 
     public SerieService(SerieRepository repository) {
         this.repository = repository;
@@ -29,6 +30,7 @@ public class SerieService {
     }
 
     public String create(Serie serie) {
+        serieSender.send(serie);
         repository.save(serie);
         return serie.getId();
     }
