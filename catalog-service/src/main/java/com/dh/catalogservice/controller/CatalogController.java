@@ -28,7 +28,7 @@ public class CatalogController {
     }
     @PostMapping("/guardar")
     public ResponseEntity<Genre> guardarGenre(@RequestBody Genre genre){
-        movieListener.receive(genre);
+
         return ResponseEntity.noContent().build();
     }
 }

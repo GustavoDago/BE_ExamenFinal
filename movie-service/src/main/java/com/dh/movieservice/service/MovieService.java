@@ -14,6 +14,7 @@ import java.util.List;
 public class MovieService {
 
     private final MovieRepository movieRepository;
+    private MovieSender movieSender;
 
     public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
@@ -24,6 +25,7 @@ public class MovieService {
     }
 
     public Movie save(Movie movie) {
+        movieSender.send(movie);
         return movieRepository.save(movie);
     }
 }

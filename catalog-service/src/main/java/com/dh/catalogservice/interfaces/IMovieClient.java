@@ -13,15 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.ArrayList;
 import java.util.List;
 
-@FeignClient(name = "movie-service")
 public interface IMovieClient {
-    @CircuitBreaker(name = "movies",fallbackMethod = "findAllEmpty")
-    @GetMapping("/{genre}")
-    ResponseEntity<List<Movie>> getMovieByGenre(@PathVariable String genre);
-    @CircuitBreaker(name = "movies",fallbackMethod = "findAllEmpty")
     @PostMapping("/save")
-    ResponseEntity<Movie> saveMovie(@RequestBody Movie movie);
-    private List<Movie> findAllEmpty(CallNotPermittedException exception){
-        return new ArrayList<>();
-    }
+    ResponseEntity<Movie> save(@RequestBody Movie movie);
 }

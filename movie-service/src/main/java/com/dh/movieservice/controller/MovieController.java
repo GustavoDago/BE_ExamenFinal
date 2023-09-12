@@ -17,7 +17,7 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
-    private MovieSender movieSender;
+
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
@@ -29,7 +29,6 @@ public class MovieController {
 
     @PostMapping("/save")
     ResponseEntity<Movie> saveMovie(@RequestBody Movie movie) {
-        movieSender.send(movie);
         return ResponseEntity.ok().body(movieService.save(movie));
     }
 }

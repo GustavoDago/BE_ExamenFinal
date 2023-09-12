@@ -26,8 +26,6 @@ public class MovieListener {
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-//        Genre genre = genreRepository.findByGenre();
-//        genre.setMovies(movie.);
-//        catalogService.guardarGenre(genre);
+
     }
 }
