@@ -9,7 +9,12 @@ import java.util.List;
 @Data
 @Document
 @AllArgsConstructor
-public class Genre {
+public class Catalogo {
+    private String genre;
     private List<Movie> movies;
     private List<Serie> series;
+
+    public Catalogo() {
+
+    }
 }

@@ -1,36 +1,66 @@
 package com.dh.catalogservice.service;
 
-import com.dh.catalogservice.domain.model.Genre;
-import com.dh.catalogservice.interfaces.IMovieClient;
-import com.dh.catalogservice.interfaces.ISerieClient;
+import com.dh.catalogservice.domain.model.Catalogo;
 import com.dh.catalogservice.records.Movie;
 import com.dh.catalogservice.records.Serie;
-import com.dh.catalogservice.repositories.GenreRepository;
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import com.dh.catalogservice.repositories.CatalogRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-
 @Service
 @RequiredArgsConstructor
 public class CatalogService {
-    private GenreRepository genreRepository;
-    public List<Genre> buscarPorGenero(String genre) {
-        return genreRepository.findByGenre(genre);
+    private CatalogRepository catalogRepository;
+    public Catalogo buscarPorGenero(String genre) {
+        return catalogRepository.findByGenre(genre);
+    }
+    public Catalogo guardarMovieEnCatalog(Movie movie){
+        Catalogo catalogo = new Catalogo();
+        Optional<Catalogo> optionalCatalogo = catalogRepository.findByGenreOptional(movie.genre());
+        if (optionalCatalogo.isPresent()){
+            catalogo = optionalCatalogo.get();
+        }
+        else {
+            catalogo.setGenre(movie.genre());
+        }
+        List<com.dh.catalogservice.domain.model.Movie> movieList = catalogo.getMovies();
+        movieList.add(convertirRecordToMovie(movie));
+        catalogo.setMovies(movieList);
+        return catalogRepository.insert(catalogo);
+    }
+    public Catalogo guardarSerieEnCatalog(Serie serie) {
+        Catalogo catalogo = new Catalogo();
+        List<com.dh.catalogservice.domain.model.Serie> serieList = new ArrayList<>();
+        Optional<Catalogo> optionalCatalogo = catalogRepository.findByGenreOptional(serie.genre());
+        if (optionalCatalogo.isPresent()){
+            catalogo = optionalCatalogo.get();
+            serieList = catalogo.getSeries();
+        }
+        else {
+            catalogo.setGenre(serie.genre());
+        }
+        serieList.add(convertirRecordToSerie(serie));
+        catalogo.setSeries(serieList);
+        return catalogRepository.insert(catalogo);
     }
 
+    private com.dh.catalogservice.domain.model.Serie convertirRecordToSerie(Serie serie) {
+        com.dh.catalogservice.domain.model.Serie serieMongo = new com.dh.catalogservice.domain.model.Serie();
+        serieMongo.setId(serie.id());
+        serieMongo.setName(serie.name());
+        serieMongo.setGenre(serie.genre());
+        return serieMongo;
+    }
+
+    private com.dh.catalogservice.domain.model.Movie convertirRecordToMovie(Movie movieRecord) {
+            com.dh.catalogservice.domain.model.Movie movieMongo = new com.dh.catalogservice.domain.model.Movie();
+            movieMongo.setId(movieRecord.id());
+            movieMongo.setName(movieRecord.name());
+            movieMongo.setGenre(movieRecord.genre());
+            movieMongo.setUrlStream(movieRecord.urlStream());
+            return movieMongo;
+    }
 }

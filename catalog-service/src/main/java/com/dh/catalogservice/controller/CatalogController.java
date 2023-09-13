@@ -1,6 +1,6 @@
 package com.dh.catalogservice.controller;
 
-import com.dh.catalogservice.domain.model.Genre;
+import com.dh.catalogservice.domain.model.Catalogo;
 import com.dh.catalogservice.interfaces.IMovieClient;
 import com.dh.catalogservice.listener.MovieListener;
 import com.dh.catalogservice.service.CatalogService;
@@ -23,11 +23,11 @@ public class CatalogController {
         this.catalogService = catalogService;
     }
     @GetMapping("/{genre}")
-    public ResponseEntity<List<Genre>> getCatalogByGenre(@PathVariable String genre){
+    public ResponseEntity<Catalogo> getCatalogByGenre(@PathVariable String genre){
         return ResponseEntity.ok(catalogService.buscarPorGenero(genre));
     }
     @PostMapping("/guardar")
-    public ResponseEntity<Genre> guardarGenre(@RequestBody Genre genre){
+    public ResponseEntity<Catalogo> guardarGenre(@RequestBody Catalogo catalogo){
 
         return ResponseEntity.noContent().build();
     }
