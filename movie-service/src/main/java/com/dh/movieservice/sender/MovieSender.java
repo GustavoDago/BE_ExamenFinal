@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MovieSender {
     private final RabbitTemplate rabbitTemplate;
-    private final Queue moviequeue;
+    private final Queue movieQueue;
     public void send(Movie movie){
-        this.rabbitTemplate.convertAndSend(this.moviequeue.getName(),movie);
+        this.rabbitTemplate.convertAndSend(this.movieQueue.getName(),movie);
     }
 }

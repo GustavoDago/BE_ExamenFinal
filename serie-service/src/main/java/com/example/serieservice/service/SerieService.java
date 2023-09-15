@@ -3,6 +3,7 @@ package com.example.serieservice.service;
 import com.example.serieservice.model.Serie;
 import com.example.serieservice.repository.SerieRepository;
 import com.example.serieservice.sender.SerieSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class SerieService {
 
     private final SerieRepository repository;
+    @Autowired
     private SerieSender serieSender;
 
     public SerieService(SerieRepository repository) {
@@ -29,9 +31,9 @@ public class SerieService {
         return repository.findAllByGenre(genre);
     }
 
-    public String create(Serie serie) {
-        serieSender.send(serie);
-        repository.save(serie);
-        return serie.getId();
+    public Serie create(Serie serie) {
+        Serie serieConID = repository.save(serie);
+        serieSender.send(serieConID);
+        return serieConID;
     }
 }

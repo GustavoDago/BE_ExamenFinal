@@ -3,6 +3,7 @@ package com.dh.movieservice.service;
 import com.dh.movieservice.model.Movie;
 import com.dh.movieservice.repository.MovieRepository;
 import com.dh.movieservice.sender.MovieSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MovieService {
 
     private final MovieRepository movieRepository;
+    @Autowired
     private MovieSender movieSender;
 
     public MovieService(MovieRepository movieRepository) {
@@ -26,7 +28,9 @@ public class MovieService {
     }
 
     public Movie save(Movie movie) {
-        movieSender.send(movie);
-        return movieRepository.save(movie);
+        Movie movieConID = movieRepository.save(movie);
+        movieSender.send(movieConID);
+        return movieConID;
+
     }
 }

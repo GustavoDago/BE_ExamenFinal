@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface CatalogRepository extends MongoRepository<Catalogo, String> {
-    Optional<Catalogo> findByGenreOptional(String genre);
-    Catalogo findByGenre(String genre);
+    Optional<Catalogo> findByGenre(String genre);
+
 
 }

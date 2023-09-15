@@ -6,18 +6,23 @@ import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.openfeign.FeignClient;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class MovieService implements IMovieClient{
-    private IMovieClient iMovieClient;
+
+    private final IMovieClient iMovieClient;
+
+    public MovieService(IMovieClient iMovieClient) {
+        this.iMovieClient = iMovieClient;
+    }
+
     @CircuitBreaker(name = "movies",fallbackMethod = "findAllEmptyMovie")
     @Retry(name = "movies")
     @Override

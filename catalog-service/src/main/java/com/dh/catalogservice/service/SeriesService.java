@@ -6,7 +6,7 @@ import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class SeriesService implements ISerieClient {
     @CircuitBreaker(name = "movies",fallbackMethod = "findAllEmptySeries")
     @Retry(name = "movies")
     @Override
-    public String create(Serie serie) {
+    public ResponseEntity<Serie> create(Serie serie) {
         return iSerieClient.create(serie);
     }
     private List<Serie> findAllEmptySeries(CallNotPermittedException exception){

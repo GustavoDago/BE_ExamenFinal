@@ -6,6 +6,7 @@ import com.example.serieservice.service.SerieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,11 +16,11 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/v1/series")
+@RequestMapping("/api/v1/serie")
 public class SerieController {
 
     private final SerieService serieService;
-
+    @Autowired
     private SerieSender serieSender;
 
     public SerieController(SerieService serieService) {
@@ -38,9 +39,8 @@ public class SerieController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestBody Serie serie) {
+    public ResponseEntity<Serie> create(@RequestBody Serie serie){
         serieService.create(serie);
-        serieSender.send(serie);
-        return serie.getId();
+        return ResponseEntity.ok(serie);
     }
 }
